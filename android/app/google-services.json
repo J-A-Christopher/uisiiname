@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "109805810153",
+    "project_id": "usiiname-push-notification",
+    "storage_bucket": "usiiname-push-notification.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:109805810153:android:82e370a0d1b72cd6361b78",
+        "android_client_info": {
+          "package_name": "com.example.usiiname"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMreaWygvMS0l7Drb50eBrK7TOUDaUa0Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

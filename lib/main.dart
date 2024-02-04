@@ -66,8 +66,8 @@ class Usiiname extends StatelessWidget {
         ),
         tones: FlexTones.jolly(Brightness.light),
         visualDensity: FlexColorScheme.comfortablePlatformDensity,
-        useMaterial3: true,
-        swapLegacyOnMaterial3: true,
+        //useMaterial3: true,
+        //swapLegacyOnMaterial3: true,
       ),
       darkTheme: FlexThemeData.dark(
         colors: const FlexSchemeColor(
@@ -118,8 +118,8 @@ class Usiiname extends StatelessWidget {
         ),
         tones: FlexTones.jolly(Brightness.dark),
         visualDensity: FlexColorScheme.comfortablePlatformDensity,
-        useMaterial3: true,
-        swapLegacyOnMaterial3: true,
+        //useMaterial3: true,
+        //swapLegacyOnMaterial3: true,
         fontFamily: GoogleFonts.poppins().fontFamily,
       ),
       home: const HomeScreen(),

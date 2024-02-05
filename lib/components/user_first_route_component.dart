@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:usiiname/components/donation_component.dart';
+import 'package:usiiname/components/donation_request.dart';
+import 'package:usiiname/components/profile_component.dart';
+import 'package:usiiname/components/your_donation_component.dart';
 
 class UserFirstRoute extends StatelessWidget {
   const UserFirstRoute({super.key});
@@ -11,7 +15,10 @@ class UserFirstRoute extends StatelessWidget {
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(10))),
         backgroundColor: const Color(0xffD6E2DF),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => const ProfileComponent()));
+        },
         child: const Icon(
           Icons.person,
           size: 35,
@@ -31,22 +38,19 @@ class UserFirstRoute extends StatelessWidget {
                     ?.copyWith(fontSize: 25, fontWeight: FontWeight.bold),
               ),
             ),
-            const SizedBox(
-              height: 15,
-            ),
             SizedBox(
               height: mediaQuery.height * 0.6,
               child: Image.asset('assets/restaurant.png'),
             ),
-            const SizedBox(
-              height: 15,
-            ),
-            Container(
-              decoration: const BoxDecoration(boxShadow: []),
+            SizedBox(
               width: mediaQuery.width,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const DonationComponent()));
+                },
                 style: ElevatedButton.styleFrom(
+                    elevation: 5,
                     backgroundColor: Colors.white,
                     side: const BorderSide(color: Colors.black)),
                 child: Text(
@@ -64,8 +68,12 @@ class UserFirstRoute extends StatelessWidget {
             SizedBox(
               width: mediaQuery.width,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const YourDonations()));
+                },
                 style: ElevatedButton.styleFrom(
+                    elevation: 5,
                     backgroundColor: Colors.white,
                     side: const BorderSide(color: Colors.black)),
                 child: Text(
@@ -81,10 +89,13 @@ class UserFirstRoute extends StatelessWidget {
               height: 15,
             ),
             SizedBox(
-              width: mediaQuery.width,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const DonationRequets()));
+                },
                 style: ElevatedButton.styleFrom(
+                    elevation: 5,
                     backgroundColor: Colors.white,
                     side: const BorderSide(color: Colors.black)),
                 child: Text(

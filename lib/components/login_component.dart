@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:usiiname/components/signup_component.dart';
 import 'package:usiiname/components/user_first_route_component.dart';
+import 'package:usiiname/features/signupfeature/presentation/bloc/sign_up_bloc.dart';
 
 class LoginComponent extends StatefulWidget {
   const LoginComponent({super.key});
@@ -109,8 +111,14 @@ class _LoginComponentState extends State<LoginComponent> {
               height: 50,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (context) => const SignUpComponent()));
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (_) => BlocProvider.value(
+                        value: SignUpBloc(),
+                        child: const SignUpComponent(),
+                      ),
+                    ),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xff8FE1D7)),

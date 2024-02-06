@@ -1,9 +1,22 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:usiiname/features/signupfeature/presentation/bloc/sign_up_bloc.dart';
+import 'package:usiiname/firebase_options.dart';
 import 'package:usiiname/homescreen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-void main() {
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print("Handling a background message: ${message.messageId}");
+}
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   runApp(const Usiiname());
 }
 
@@ -122,7 +135,10 @@ class Usiiname extends StatelessWidget {
       //   //swapLegacyOnMaterial3: true,
       //   fontFamily: GoogleFonts.poppins().fontFamily,
       // ),
-      home: const HomeScreen(),
+      home: BlocProvider(
+        create: (_) => SignUpBloc(),
+        child: const HomeScreen(),
+      ),
     );
   }
 }

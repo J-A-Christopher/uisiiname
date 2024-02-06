@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:usiiname/components/login_component.dart';
+import 'package:usiiname/features/signupfeature/presentation/bloc/sign_up_bloc.dart';
 
 class OnBoardingScreen extends StatelessWidget {
   const OnBoardingScreen({super.key});
@@ -38,7 +40,13 @@ class OnBoardingScreen extends StatelessWidget {
         ],
         onDone: () {
           Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => const LoginComponent()));
+            MaterialPageRoute(
+              builder: (_) => BlocProvider.value(
+                value: SignUpBloc(),
+                child: const LoginComponent(),
+              ),
+            ),
+          );
         },
         done: const Text(
           'Login',

@@ -3,6 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:usiiname/features/loginfeature/presentation/bloc/login_bloc.dart';
 import 'package:usiiname/features/signupfeature/presentation/bloc/sign_up_bloc.dart';
 import 'package:usiiname/firebase_options.dart';
 import 'package:usiiname/homescreen.dart';
@@ -135,8 +136,12 @@ class Usiiname extends StatelessWidget {
       //   //swapLegacyOnMaterial3: true,
       //   fontFamily: GoogleFonts.poppins().fontFamily,
       // ),
-      home: BlocProvider(
-        create: (_) => SignUpBloc(),
+      home: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (_) => SignUpBloc(),
+          ),
+        ],
         child: const HomeScreen(),
       ),
     );

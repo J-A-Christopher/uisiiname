@@ -342,7 +342,8 @@ class _SignUpComponentState extends State<SignUpComponent> {
                   TextButton(
                       onPressed: () {
                         Navigator.of(context).pushReplacement(MaterialPageRoute(
-                            builder: (context) => const LoginComponent()));
+                            builder: (context) =>
+                                const LoginComponentWrapper()));
                       },
                       child: Text(
                         'Sign in instead',

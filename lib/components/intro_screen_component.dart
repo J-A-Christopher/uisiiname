@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:introduction_screen/introduction_screen.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:usiiname/components/login_component.dart';
+import 'package:usiiname/components/user_first_route_component.dart';
 import 'package:usiiname/features/signupfeature/presentation/bloc/sign_up_bloc.dart';
+import 'package:usiiname/utils/storage_utils.dart';
 
 class OnBoardingScreen extends StatelessWidget {
   const OnBoardingScreen({super.key});
@@ -38,15 +41,44 @@ class OnBoardingScreen extends StatelessWidget {
               image: buildImage('assets/start04.png', context),
               decoration: getPageDecoration())
         ],
-        onDone: () {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(
-              builder: (_) => BlocProvider.value(
-                value: SignUpBloc(),
-                child: const LoginComponent(),
-              ),
-            ),
-          );
+        onDone: () async {
+          final userToken = await StorageUtils().getUserInfo(key: 'token');
+          if (userToken == null) {
+            if (context.mounted) {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (_) => BlocProvider.value(
+                    value: SignUpBloc(),
+                    child: const LoginComponentWrapper(),
+                  ),
+                ),
+              );
+            }
+            return;
+          }
+          bool hasExpired = JwtDecoder.isExpired(userToken);
+          if (hasExpired) {
+            await StorageUtils().logoutUser();
+          }
+          if (context.mounted) {
+            hasExpired
+                ? Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (_) => BlocProvider.value(
+                        value: SignUpBloc(),
+                        child: const LoginComponentWrapper(),
+                      ),
+                    ),
+                  )
+                : Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (_) => BlocProvider.value(
+                        value: SignUpBloc(),
+                        child: const UserFirstRoute(),
+                      ),
+                    ),
+                  );
+          }
         },
         done: const Text(
           'Login',

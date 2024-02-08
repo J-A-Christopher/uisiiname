@@ -70,7 +70,7 @@ class UserFirstRoute extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const YourDonations()));
+                      builder: (context) => const YourDonationsWrapper()));
                 },
                 style: ElevatedButton.styleFrom(
                     elevation: 5,

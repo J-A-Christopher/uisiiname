@@ -2,7 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:usiiname/components/signup_component.dart';
 import 'package:usiiname/components/user_first_route_component.dart';
+import 'package:usiiname/features/loginfeature/model/login_body.dart';
+import 'package:usiiname/features/loginfeature/presentation/bloc/login_bloc.dart';
 import 'package:usiiname/features/signupfeature/presentation/bloc/sign_up_bloc.dart';
+import 'package:usiiname/utils/storage_utils.dart';
+
+class LoginComponentWrapper extends StatelessWidget {
+  const LoginComponentWrapper({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: BlocProvider(
+        create: (context) => LoginBloc(),
+        child: const LoginComponent(),
+      ),
+    );
+  }
+}
 
 class LoginComponent extends StatefulWidget {
   const LoginComponent({super.key});
@@ -11,13 +28,19 @@ class LoginComponent extends StatefulWidget {
   State<LoginComponent> createState() => _LoginComponentState();
 }
 
+final loginFormKey = GlobalKey<FormState>();
+
+var username = '';
+var password = '';
+
 class _LoginComponentState extends State<LoginComponent> {
   @override
   Widget build(BuildContext context) {
     final mediQuery = MediaQuery.of(context).size.width;
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.only(top: 8.0, left: 15, right: 15),
+    return Padding(
+      padding: const EdgeInsets.only(top: 8.0, left: 15, right: 15),
+      child: Form(
+        key: loginFormKey,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -32,6 +55,15 @@ class _LoginComponentState extends State<LoginComponent> {
               height: 10,
             ),
             TextFormField(
+              onSaved: (value) {
+                username = value!;
+              },
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Usrname cannot be empty';
+                }
+                return null;
+              },
               decoration: InputDecoration(
                   contentPadding: const EdgeInsets.all(5),
                   filled: true,
@@ -49,6 +81,16 @@ class _LoginComponentState extends State<LoginComponent> {
               height: 10,
             ),
             TextFormField(
+              onSaved: (value) {
+                password = value!;
+              },
+              obscureText: true,
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Password cannot be empty';
+                }
+                return null;
+              },
               decoration: InputDecoration(
                   contentPadding: const EdgeInsets.all(5),
                   filled: true,
@@ -77,14 +119,55 @@ class _LoginComponentState extends State<LoginComponent> {
               width: 100,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (context) => const UserFirstRoute()));
+                  //submitLoginForm();
+                  if (loginFormKey.currentState!.validate()) {
+                    loginFormKey.currentState!.save();
+                    final loginDetails =
+                        LoginBody(password: password, username: username)
+                            .toJson();
+                    print(password);
+                    print(username);
+
+                    context
+                        .read<LoginBloc>()
+                        .add(OnLogin(loginResponse: loginDetails));
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
                 ),
                 child: const Text('LOGIN'),
               ),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            BlocListener<LoginBloc, LoginState>(
+              listener: (context, state) {
+                if (state is LoginLoaded) {
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (context) => const UserFirstRoute()));
+                }
+                if (state is LoginError) {
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(SnackBar(content: Text(state.message)));
+                }
+              },
+              child:
+                  BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
+                if (state is LoginLoading) {
+                  return const Center(
+                    child: CircularProgressIndicator.adaptive(),
+                  );
+                }
+                if (state is LoginLoaded) {
+                  final token = state.loginData.accessToken;
+                  //final userId = state.loginData.id;
+                  StorageUtils().writeUserInfo(key: 'token', userInfo: token);
+                  // StorageUtils().writeUserInfo(key: 'uid', userInfo: userId);
+                }
+                return const SizedBox();
+              }),
             ),
             const SizedBox(
               height: 30,

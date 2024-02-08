@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class DonationComponent extends StatefulWidget {
   const DonationComponent({super.key});
@@ -9,6 +12,17 @@ class DonationComponent extends StatefulWidget {
 
 class _DonationComponentState extends State<DonationComponent> {
   String selectedValue = "Yes";
+  String? pickedFile;
+  Future<void> getImage() async {
+    final ImagePicker picker = ImagePicker();
+    final pickedImage = await picker.pickImage(source: ImageSource.camera);
+    if (pickedFile != null) {
+      setState(() {
+        pickedFile = pickedImage!.path;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +46,10 @@ class _DonationComponentState extends State<DonationComponent> {
             Container(
               height: 100,
               width: 100,
-              decoration: const BoxDecoration(color: Colors.white),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  image:
+                      DecorationImage(image: NetworkImage(pickedFile ?? ''))),
               child: Center(
                 child: Text(
                   'Take a picture of your food.',
@@ -46,7 +63,7 @@ class _DonationComponentState extends State<DonationComponent> {
             TextButton.icon(
                 onPressed: () {},
                 icon: const Icon(
-                  Icons.camera,
+                  Icons.camera_alt,
                   color: Colors.black,
                 ),
                 label: Text(

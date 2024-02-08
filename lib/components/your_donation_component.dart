@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:usiiname/features/liveDonations/presentation/bloc/live_donation_bloc.dart';
+import 'package:usiiname/features/userDonations/presentation/bloc/user_donations_bloc.dart';
 
-class YourDonations extends StatelessWidget {
-  const YourDonations({super.key});
+class YourDonationsWrapper extends StatelessWidget {
+  const YourDonationsWrapper({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,145 +24,240 @@ class YourDonations extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Your Donations'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(top: 20.0, left: 15, right: 15),
-        child: ListView(
-          children: [
-            Center(
-              child: Text(
-                'Live Donations.',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall
-                    ?.copyWith(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
+      body: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => LiveDonationBloc(),
+          ),
+          BlocProvider(
+            create: (context) => UserDonationsBloc(),
+          ),
+        ],
+        child: const YourDonations(),
+      ),
+    );
+  }
+}
+
+class YourDonations extends StatefulWidget {
+  const YourDonations({super.key});
+
+  @override
+  State<YourDonations> createState() => _YourDonationsState();
+}
+
+class _YourDonationsState extends State<YourDonations> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<LiveDonationBloc>().add(OnLiveDonation());
+    context.read<UserDonationsBloc>().add(OnUserDonation());
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 20.0, left: 15, right: 15),
+      child: ListView(
+        children: [
+          Center(
+            child: Text(
+              'Live Donations.',
+              style: Theme.of(context)
+                  .textTheme
+                  .bodySmall
+                  ?.copyWith(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    Flexible(flex: 2, child: Image.asset('assets/avatar.png')),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    const Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Item Name',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          BlocListener<LiveDonationBloc, LiveDonationState>(
+            listener: (context, state) {
+              if (state is LiveDonationError) {
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text(state.message)));
+              }
+            },
+            child: BlocBuilder<LiveDonationBloc, LiveDonationState>(
+                builder: (context, state) {
+              if (state is LiveDonationLoading) {
+                return const Center(
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation(Color(0xff5BDDCD)),
+                  ),
+                );
+              }
+              if (state is LiveDonationLoaded) {
+                return ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    final liveDonationObject = state.liveDonationData.allFoods!;
+                    DateTime parsedDate = DateTime.parse(
+                        state.liveDonationData.allFoods![index].createdAt ??
+                            '');
+                    return Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Flexible(
+                                flex: 2,
+                                child: Image.asset('assets/avatar.png')),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '${liveDonationObject[index].name}',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                    'Quantity: ${liveDonationObject[index].quantity}'),
+                                Text(
+                                    'Time of Preparation: ${liveDonationObject[index].timeCooked}'),
+                                Text(
+                                    'Date: ${DateFormat.yMEd().format(parsedDate)}'),
+                              ],
+                            )
+                          ],
                         ),
-                        Text('Quantity: 200 packets '),
-                        Text('Time of Preparation: 1:30 AM '),
-                        Text('Date: 4/02/2024 '),
-                      ],
-                    )
-                  ],
-                ),
-              ),
+                      ),
+                    );
+                  },
+                  itemCount: state.liveDonationData.allFoods!.length,
+                );
+              }
+
+              return const SizedBox();
+            }),
+          ),
+          const SizedBox(
+            height: 30,
+          ),
+          Center(
+            child: Text(
+              'Your Donations.',
+              style: Theme.of(context)
+                  .textTheme
+                  .bodySmall
+                  ?.copyWith(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(
-              height: 30,
-            ),
-            Center(
-              child: Text(
-                'Your Donations.',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall
-                    ?.copyWith(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    Flexible(flex: 1, child: Image.asset('assets/avatar.png')),
-                    const SizedBox(
-                      width: 10,
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          BlocBuilder<UserDonationsBloc, UserDonationsState>(
+              builder: (context, state) {
+            if (state is UserDonationsLoading) {
+              return const CircularProgressIndicator();
+            }
+            if (state is UserDonationsLoaded) {
+              final generalObject = state.userDonationData.newDataStructure;
+
+              return ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  DateTime parsedDate = DateTime.parse(
+                      generalObject![index].order?.updatedAt ?? '');
+                  return Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Flexible(
+                              flex: 1, child: Image.asset('assets/avatar.png')),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '${generalObject[index].food!.name}',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                  'Quantity: ${generalObject[index].food!.quantity}'),
+                              Text(
+                                  'Status: ${generalObject[index].order!.status} '),
+                              Text(
+                                  'Date: ${DateFormat.yMEd().format(parsedDate)}'),
+                            ],
+                          )
+                        ],
+                      ),
                     ),
-                    const Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Item Name',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text('Quantity: 200 packets '),
-                        Text('Status: Accepted '),
-                        Text('Date: 5/02/2024 '),
-                      ],
-                    )
-                  ],
-                ),
+                  );
+                },
+                itemCount: state.userDonationData.newDataStructure!.length,
+              );
+            }
+            return const SizedBox();
+          }),
+          const SizedBox(
+            height: 10,
+          ),
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Flexible(flex: 1, child: Image.asset('assets/avatar.png')),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  const Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Item Name',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text('Quantity: 200 packets '),
+                      Text('Status: Not Accepted '),
+                      Text('Date: 3/5/2024 '),
+                    ],
+                  )
+                ],
               ),
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    Flexible(flex: 1, child: Image.asset('assets/avatar.png')),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    const Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Item Name',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text('Quantity: 200 packets '),
-                        Text('Status: Not Accepted '),
-                        Text('Date: 3/5/2024 '),
-                      ],
-                    )
-                  ],
-                ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Flexible(flex: 1, child: Image.asset('assets/avatar.png')),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  const Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Item Name',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text('Quantity: 200 packets '),
+                      Text('Status: Accepted '),
+                      Text('Date: 3/5/2024 '),
+                    ],
+                  )
+                ],
               ),
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    Flexible(flex: 1, child: Image.asset('assets/avatar.png')),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    const Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Item Name',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text('Quantity: 200 packets '),
-                        Text('Status: Accepted '),
-                        Text('Date: 3/5/2024 '),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

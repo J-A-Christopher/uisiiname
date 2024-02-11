@@ -60,7 +60,7 @@ class _LoginComponentState extends State<LoginComponent> {
               },
               validator: (value) {
                 if (value!.isEmpty) {
-                  return 'Usrname cannot be empty';
+                  return 'Username cannot be empty';
                 }
                 return null;
               },

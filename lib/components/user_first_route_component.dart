@@ -7,6 +7,7 @@ import 'package:usiiname/components/your_donation_component.dart';
 import 'package:usiiname/features/createfood/presentation/bloc/food_creation_bloc.dart';
 import 'package:usiiname/features/loginfeature/presentation/bloc/login_bloc.dart';
 import 'package:usiiname/features/profilefetch/presentation/bloc/profile_fetch_bloc.dart';
+import 'package:usiiname/utils/bottom_nav_bar.dart';
 import 'package:usiiname/utils/storage_utils.dart';
 
 class UserFirstRoute extends StatefulWidget {
@@ -99,7 +100,9 @@ class _UserFirstRouteState extends State<UserFirstRoute> {
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const YourDonationsWrapper()));
+                        builder: (context) => const BottomNavgBar()
+                        //const YourDonationsWrapper()
+                        ));
                   },
                   style: ElevatedButton.styleFrom(
                       elevation: 5,

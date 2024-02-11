@@ -23,22 +23,28 @@ class LiveDonations {
 
 class AllFoods {
   int? id;
+  String? imageUrl;
   String? name;
+  String? dateOfPreparation;
+  String? timeOfPreparation;
+  String? timeRequiredForDelivery;
   int? quantity;
-  String? timeCooked;
   String? address;
   String? utensilsRequired;
   String? status;
   String? createdAt;
   String? updatedAt;
   int? userId;
-  int? orderId;
+  Null? orderId;
 
   AllFoods(
       {this.id,
+      this.imageUrl,
       this.name,
+      this.dateOfPreparation,
+      this.timeOfPreparation,
+      this.timeRequiredForDelivery,
       this.quantity,
-      this.timeCooked,
       this.address,
       this.utensilsRequired,
       this.status,
@@ -49,9 +55,12 @@ class AllFoods {
 
   AllFoods.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    imageUrl = json['imageUrl'];
     name = json['name'];
+    dateOfPreparation = json['dateOfPreparation'];
+    timeOfPreparation = json['timeOfPreparation'];
+    timeRequiredForDelivery = json['timeRequiredForDelivery'];
     quantity = json['quantity'];
-    timeCooked = json['timeCooked'];
     address = json['address'];
     utensilsRequired = json['utensilsRequired'];
     status = json['status'];
@@ -64,9 +73,12 @@ class AllFoods {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
+    data['imageUrl'] = this.imageUrl;
     data['name'] = this.name;
+    data['dateOfPreparation'] = this.dateOfPreparation;
+    data['timeOfPreparation'] = this.timeOfPreparation;
+    data['timeRequiredForDelivery'] = this.timeRequiredForDelivery;
     data['quantity'] = this.quantity;
-    data['timeCooked'] = this.timeCooked;
     data['address'] = this.address;
     data['utensilsRequired'] = this.utensilsRequired;
     data['status'] = this.status;

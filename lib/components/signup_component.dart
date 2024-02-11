@@ -1,5 +1,9 @@
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:usiiname/components/login_component.dart';
 import 'package:usiiname/features/signupfeature/model/sign_up_model.dart';
 import 'package:usiiname/features/signupfeature/presentation/bloc/sign_up_bloc.dart';
@@ -22,11 +26,36 @@ class _SignUpComponentState extends State<SignUpComponent> {
   var phoneNumber = '';
   var email = '';
   var password = '';
+  String? pickedImage;
+  UploadTask? uploadTask;
+  bool isLoading = false;
+  Future<void> getImage() async {
+    final ImagePicker picker = ImagePicker();
+    setState(() {
+      isLoading = true;
+    });
+    final pickedFile =
+        await picker.pickImage(source: ImageSource.camera, imageQuality: 10);
+    if (pickedFile != null) {
+      final extension = pickedFile.path.split('.').last;
+      final name = 'profile-${DateTime.now()}.$extension';
+      final storageReference = FirebaseStorage.instance.ref();
+      final foodRef = storageReference.child('profile/$name');
+      uploadTask = foodRef.putFile(File(pickedFile.path).absolute,
+          SettableMetadata(contentType: 'image/$extension'));
+      final snapShot = await uploadTask?.whenComplete(() => null);
+      final downLoadUrl = await snapShot?.ref.getDownloadURL();
+      setState(() {
+        pickedImage = downLoadUrl;
+        isLoading = false;
+      });
+    }
+  }
 
   void submitSignUpForm() async {
-    if (formKey.currentState!.validate()) {
+    if (formKey.currentState!.validate() && pickedImage != null) {
       formKey.currentState!.save();
-      var fcmToken = await FCMManager.getDeviceFcMToken();
+      var fcmToken = await FCMManager().initNotifications();
       var signUpData = UserData(
               id: null,
               createdAt: null,
@@ -38,7 +67,8 @@ class _SignUpComponentState extends State<SignUpComponent> {
               phoneNumber: phoneNumber,
               pushToken: fcmToken,
               updatedAt: null,
-              username: userName)
+              username: userName,
+              profilePicture: pickedImage)
           .toJson();
       if (context.mounted) {
         context.read<SignUpBloc>().add(OnSignUp(userData: signUpData));
@@ -65,6 +95,36 @@ class _SignUpComponentState extends State<SignUpComponent> {
                     .displaySmall
                     ?.copyWith(fontSize: 20, fontWeight: FontWeight.bold),
               ),
+              const SizedBox(
+                height: 10,
+              ),
+              Center(
+                child: CircleAvatar(
+                  radius: 40,
+                  backgroundColor: const Color(0xff5BDDCD),
+                  child: isLoading
+                      ? const CircularProgressIndicator()
+                      : pickedImage == null
+                          ? null
+                          : ClipRRect(
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(50)),
+                              child: Image.network(
+                                '$pickedImage',
+                                width: 80,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                ),
+              ),
+              IconButton(
+                  onPressed: () {
+                    getImage();
+                  },
+                  icon: const Icon(
+                    Icons.camera_alt,
+                    size: 40,
+                  )),
               const SizedBox(
                 height: 10,
               ),
@@ -322,13 +382,17 @@ class _SignUpComponentState extends State<SignUpComponent> {
                   if (state is SignUpLoaded) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text('${state.successUser.message}')));
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) => const LoginComponentWrapper()));
                   }
                 },
                 child: BlocBuilder<SignUpBloc, SignUpState>(
                     builder: (context, state) {
                   if (state is SignUpLoading) {
                     return const Center(
-                        child: CircularProgressIndicator.adaptive());
+                        child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation(Color(0xff5BDDCD)),
+                    ));
                   }
                   return const SizedBox();
                 }),

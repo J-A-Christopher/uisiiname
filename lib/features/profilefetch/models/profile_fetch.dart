@@ -1,67 +1,58 @@
-class SignUpModelResponse {
-  String? message;
-  UserData? userData;
+class ProfileFetchModel {
+  UserModel? userModel;
 
-  SignUpModelResponse({this.message, this.userData});
+  ProfileFetchModel({this.userModel});
 
-  SignUpModelResponse.fromJson(Map<String, dynamic> json) {
-    message = json['message'];
-    userData = json['userData'] != null
-        ? new UserData.fromJson(json['userData'])
+  ProfileFetchModel.fromJson(Map<String, dynamic> json) {
+    userModel = json['userModel'] != null
+        ? new UserModel.fromJson(json['userModel'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['message'] = this.message;
-    if (this.userData != null) {
-      data['userData'] = this.userData!.toJson();
+    if (this.userModel != null) {
+      data['userModel'] = this.userModel!.toJson();
     }
     return data;
   }
 }
 
-class UserData {
+class UserModel {
   int? id;
   String? firstname;
   String? profilePicture;
   String? lastname;
   String? username;
   String? email;
-  String? password;
-  String? pushToken;
   String? phoneNumber;
   String? donationType;
-  String? updatedAt;
   String? createdAt;
+  String? updatedAt;
 
-  UserData(
+  UserModel(
       {this.id,
       this.firstname,
       this.profilePicture,
       this.lastname,
       this.username,
       this.email,
-      this.password,
-      this.pushToken,
       this.phoneNumber,
       this.donationType,
-      this.updatedAt,
-      this.createdAt});
+      this.createdAt,
+      this.updatedAt});
 
-  UserData.fromJson(Map<String, dynamic> json) {
+  UserModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     firstname = json['firstname'];
     profilePicture = json['profilePicture'];
     lastname = json['lastname'];
     username = json['username'];
     email = json['email'];
-    password = json['password'];
-    pushToken = json['pushToken'];
     phoneNumber = json['phoneNumber'];
     donationType = json['donationType'];
-    updatedAt = json['updatedAt'];
     createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
   }
 
   Map<String, dynamic> toJson() {
@@ -72,14 +63,11 @@ class UserData {
     data['lastname'] = this.lastname;
     data['username'] = this.username;
     data['email'] = this.email;
-    data['password'] = this.password;
-    data['pushToken'] = this.pushToken;
     data['phoneNumber'] = this.phoneNumber;
     data['donationType'] = this.donationType;
-    data['updatedAt'] = this.updatedAt;
     data['createdAt'] = this.createdAt;
+    data['updatedAt'] = this.updatedAt;
     return data;
   }
 }
-
 

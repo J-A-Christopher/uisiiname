@@ -157,14 +157,19 @@ class _LoginComponentState extends State<LoginComponent> {
                   BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
                 if (state is LoginLoading) {
                   return const Center(
-                    child: CircularProgressIndicator.adaptive(),
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation(Color(0xff5BDDCD)),
+                    ),
                   );
                 }
                 if (state is LoginLoaded) {
                   final token = state.loginData.accessToken;
+                  final username = state.loginData.username;
                   //final userId = state.loginData.id;
                   StorageUtils().writeUserInfo(key: 'token', userInfo: token);
-                  // StorageUtils().writeUserInfo(key: 'uid', userInfo: userId);
+                  StorageUtils()
+                      .writeUserInfo(key: 'username', userInfo: username);
+                  print(username);
                 }
                 return const SizedBox();
               }),

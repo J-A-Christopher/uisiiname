@@ -3,6 +3,7 @@ import 'package:usiiname/components/chat.dart';
 import 'package:usiiname/components/random_recipe.dart';
 import 'package:usiiname/components/your_donation_component.dart';
 
+
 class BottomNavgBar extends StatefulWidget {
   const BottomNavgBar({super.key});
 

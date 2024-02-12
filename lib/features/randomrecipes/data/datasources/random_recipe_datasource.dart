@@ -10,11 +10,13 @@ abstract class RemoteRandomRecipe {
 
 class RemoteRandomRecipeImpl implements RemoteRandomRecipe {
   final client = http.Client();
-  //final apiKey = dotenv.env['APIKEY'];
+  final apiKey = dotenv.env['SPOONACULAR_API_KEY'];
+
   @override
   Future<RandomRecipes> getRandomRecipe({required String mealType}) async {
+    print(apiKey);
     final response = await client.get(Uri.parse(
-        'https://api.spoonacular.com/recipes/random?number=30&tags=$mealType&apiKey=dae307428d224c6b9505dfc1c2088630'));
+        'https://api.spoonacular.com/recipes/random?number=30&tags=$mealType&apiKey=$apiKey'));
 
     if (response.statusCode != 200) {
       throw ServerException();

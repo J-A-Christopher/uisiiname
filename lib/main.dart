@@ -2,6 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:usiiname/components/donation_request.dart';
 import 'package:usiiname/features/loginfeature/presentation/bloc/login_bloc.dart';
@@ -18,11 +20,13 @@ import 'package:usiiname/utils/fcm_manager.dart';
 // }
 
 final navigatorKey = GlobalKey<NavigatorState>();
-void main() async {
+Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   //FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await FCMManager().initNotifications();
+  Gemini.init(apiKey: dotenv.env['GEMINI_API_KEY'] ?? '');
+  await dotenv.load(fileName: ".env");
   runApp(const Usiiname());
 }
 

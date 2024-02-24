@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:usiiname/components/donation_component.dart';
 import 'package:usiiname/components/donation_request.dart';
 import 'package:usiiname/components/profile_component.dart';
@@ -21,11 +23,18 @@ class UserFirstRoute extends StatefulWidget {
 
 class _UserFirstRouteState extends State<UserFirstRoute> {
   String? username;
+  String? imageUrl;
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () async {
       username = await StorageUtils().getUserInfo(key: 'username');
+      String? token = await StorageUtils().getUserInfo(key: 'token');
+      var decodeToken = JwtDecoder.decode(token!);
+      print(decodeToken);
+      setState(() {
+        imageUrl = decodeToken['user']['profilePicture'];
+      });
     });
   }
 
@@ -67,7 +76,20 @@ class _UserFirstRouteState extends State<UserFirstRoute> {
               ),
               SizedBox(
                 height: mediaQuery.height * 0.6,
-                child: Image.asset('assets/restaurant.png'),
+                child: imageUrl == null
+                    ? Image.asset('assets/placeholder1.jpg')
+                    : Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: CachedNetworkImage(
+                          imageUrl: imageUrl!,
+                          placeholder: (context, url) {
+                            return const Center(
+                                child: CircularProgressIndicator(
+                              color: Color(0xff8FE1D7),
+                            ));
+                          },
+                        ),
+                      ),
               ),
               SizedBox(
                 width: mediaQuery.width,

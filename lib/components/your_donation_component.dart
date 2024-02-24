@@ -104,7 +104,7 @@ class _YourDonationsState extends State<YourDonations> {
                               '');
                           return GestureDetector(
                             onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(
+                              Navigator.of(context).pushReplacement(MaterialPageRoute(
                                   builder: (context) => BlocProvider(
                                         create: (_) =>
                                             FirstOrderReservationBloc(),

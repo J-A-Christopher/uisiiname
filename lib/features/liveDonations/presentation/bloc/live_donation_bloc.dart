@@ -17,7 +17,8 @@ class LiveDonationBloc extends Bloc<LiveDonationEvent, LiveDonationState> {
         final liveDonationData = await apiRepository.liveDonations();
         emit(LiveDonationLoaded(liveDonationData: liveDonationData));
       } catch (error) {
-        emit( LiveDonationError(message: error.toString()));
+        print(error);
+        emit(LiveDonationError(message: error.toString()));
       }
     });
   }

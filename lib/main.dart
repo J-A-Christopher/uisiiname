@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
@@ -12,6 +14,7 @@ import 'package:usiiname/firebase_options.dart';
 import 'package:usiiname/homescreen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:usiiname/utils/fcm_manager.dart';
+import 'package:usiiname/utils/logger.dart';
 
 // Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 //   await Firebase.initializeApp();
@@ -21,13 +24,21 @@ import 'package:usiiname/utils/fcm_manager.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 Future main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  //FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  await FCMManager().initNotifications();
-  Gemini.init(apiKey: dotenv.env['GEMINI_API_KEY'] ?? '');
-  await dotenv.load(fileName: ".env");
-  runApp(const Usiiname());
+ 
+  runZonedGuarded(() async {
+     WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform);
+    //FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+    await FCMManager().initNotifications();
+    await dotenv.load(fileName: ".env");
+    Gemini.init(apiKey: dotenv.env['GEMINI_API_KEY'] ?? '');
+    return runApp(const Usiiname());
+  }, (error, stack) {
+    return runApp(MaterialApp(
+      home: ErrorLogger(error: error.toString()),
+    ));
+  });
 }
 
 class Usiiname extends StatelessWidget {

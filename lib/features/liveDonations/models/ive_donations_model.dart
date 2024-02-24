@@ -7,15 +7,15 @@ class LiveDonations {
     if (json['allFoods'] != null) {
       allFoods = <AllFoods>[];
       json['allFoods'].forEach((v) {
-        allFoods!.add(new AllFoods.fromJson(v));
+        allFoods!.add(AllFoods.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.allFoods != null) {
-      data['allFoods'] = this.allFoods!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (allFoods != null) {
+      data['allFoods'] = allFoods!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -35,7 +35,7 @@ class AllFoods {
   String? createdAt;
   String? updatedAt;
   int? userId;
-  Null? orderId;
+  int? orderId;
 
   AllFoods(
       {this.id,
@@ -71,21 +71,21 @@ class AllFoods {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['imageUrl'] = this.imageUrl;
-    data['name'] = this.name;
-    data['dateOfPreparation'] = this.dateOfPreparation;
-    data['timeOfPreparation'] = this.timeOfPreparation;
-    data['timeRequiredForDelivery'] = this.timeRequiredForDelivery;
-    data['quantity'] = this.quantity;
-    data['address'] = this.address;
-    data['utensilsRequired'] = this.utensilsRequired;
-    data['status'] = this.status;
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
-    data['userId'] = this.userId;
-    data['orderId'] = this.orderId;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['imageUrl'] = imageUrl;
+    data['name'] = name;
+    data['dateOfPreparation'] = dateOfPreparation;
+    data['timeOfPreparation'] = timeOfPreparation;
+    data['timeRequiredForDelivery'] = timeRequiredForDelivery;
+    data['quantity'] = quantity;
+    data['address'] = address;
+    data['utensilsRequired'] = utensilsRequired;
+    data['status'] = status;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    data['userId'] = userId;
+    data['orderId'] = orderId;
     return data;
   }
 }

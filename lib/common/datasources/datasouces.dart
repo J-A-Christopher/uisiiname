@@ -3,6 +3,7 @@ import 'package:usiiname/features/createfood/models/create_food_model.dart';
 import 'package:usiiname/features/first-order-processing/models/first_order_processing_response.dart';
 import 'package:usiiname/features/liveDonations/models/ive_donations_model.dart';
 import 'package:usiiname/features/loginfeature/model/login_response.dart';
+import 'package:usiiname/features/orderstatus/model/order_status_response.dart';
 import 'package:usiiname/features/profilefetch/models/profile_fetch.dart';
 import 'package:usiiname/features/signupfeature/model/sign_up_model.dart';
 import 'package:usiiname/features/userDonations/model/userdonations_model.dart';
@@ -19,6 +20,7 @@ class ApiProvider {
   final String userFoodCreationUrl = '$BASEURL/add-food';
   final String foodReservation = '$BASEURL/order-food';
   final String profileFetch = '$BASEURL/get-user-profile';
+  final String processOrder = '$BASEURL/process-order';
   late final String token;
 
   ApiProvider() {
@@ -26,9 +28,13 @@ class ApiProvider {
   }
 
   Future<void> init() async {
-    final retrievedToken = await StorageUtils().getUserInfo(key: 'token');
-    if (retrievedToken == null) throw AssertionError('NO token provider');
-    token = retrievedToken;
+    try {
+      final retrievedToken = await StorageUtils().getUserInfo(key: 'token');
+      if (retrievedToken == null) throw AssertionError('NO token provider');
+      token = retrievedToken;
+    } catch (error) {
+      print(error);
+    }
   }
 
   Future<SignUpModelResponse> createUser({required userSignUpData}) async {
@@ -285,6 +291,47 @@ class ApiProvider {
       } else {
         ProfileFetchModel orderReservation =
             ProfileFetchModel.fromJson(response.data);
+        return orderReservation;
+      }
+    } on DioException catch (e) {
+      if (e.response != null) {
+        //Request reached server but failed
+        print('Dio e.response: ${e.response!.data}');
+        print('Dio e.response: ${e.response!.data['message']}');
+        throw Exception(e.response?.data['message']);
+      } else {
+        //If you're offfline and request did not reach server
+        String? errorMessage = e.message;
+        int colonIndex = errorMessage!.indexOf(':');
+        String extractedPart = errorMessage.substring(0, colonIndex).trim();
+        print('Response.data${e.response?.data}');
+        throw Exception(extractedPart);
+      }
+    } catch (err, stackTrace) {
+      print(stackTrace);
+      print('In Here${err.toString()}');
+      rethrow;
+    }
+  }
+
+  //Process-order
+  Future<OrderResponse> processOrderByFoodOwner(
+      {required Map<String, dynamic> orderData}) async {
+    try {
+      Response response = await _dio.post(processOrder,
+          data: orderData,
+          options: Options(
+            method: "POST",
+            contentType: 'application/json; charset=utf-8',
+            headers: {'Accept': 'application/json', 'x-access-token': token},
+            validateStatus: (_) => true,
+          ));
+
+      print("order verification response: ${response.data}");
+      if (response.statusCode != 201) {
+        throw Exception(response.statusMessage);
+      } else {
+        OrderResponse orderReservation = OrderResponse.fromJson(response.data);
         return orderReservation;
       }
     } on DioException catch (e) {

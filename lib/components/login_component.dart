@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:usiiname/components/signup_component.dart';
 import 'package:usiiname/components/user_first_route_component.dart';
 import 'package:usiiname/features/loginfeature/model/login_body.dart';
@@ -165,10 +166,12 @@ class _LoginComponentState extends State<LoginComponent> {
                 if (state is LoginLoaded) {
                   final token = state.loginData.accessToken;
                   final username = state.loginData.username;
+                  
                   //final userId = state.loginData.id;
                   StorageUtils().writeUserInfo(key: 'token', userInfo: token);
                   StorageUtils()
                       .writeUserInfo(key: 'username', userInfo: username);
+
                   print(username);
                 }
                 return const SizedBox();

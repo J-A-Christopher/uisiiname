@@ -78,7 +78,7 @@ class _YourDonationsState extends State<YourDonations> {
               if (state is LiveDonationLoading) {
                 return const Center(
                   child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation(Color(0xff5BDDCD)),
+                  
                   ),
                 );
               }
@@ -134,7 +134,7 @@ class _YourDonationsState extends State<YourDonations> {
                                 padding: const EdgeInsets.only(right: 20),
                                 child: const Icon(
                                   Icons.delete,
-                                  color: Colors.white,
+                                 
                                   size: 40,
                                 ),
                               ),
@@ -159,10 +159,7 @@ class _YourDonationsState extends State<YourDonations> {
                                                     const Center(
                                                       child:
                                                           CircularProgressIndicator(
-                                                        valueColor:
-                                                            AlwaysStoppedAnimation(
-                                                                Color(
-                                                                    0xff5BDDCD)),
+                                                       
                                                       ),
                                                     ),
                                                 errorWidget: (context, url,
@@ -222,7 +219,7 @@ class _YourDonationsState extends State<YourDonations> {
               builder: (context, state) {
             if (state is UserDonationsLoading) {
               return const CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation(Color(0xff5BDDCD)),
+               
               );
             }
             if (state is UserDonationsLoaded) {
@@ -258,25 +255,13 @@ class _YourDonationsState extends State<YourDonations> {
                                               const Center(
                                                 child:
                                                     CircularProgressIndicator(
-                                                  valueColor:
-                                                      AlwaysStoppedAnimation(
-                                                          Color(0xff5BDDCD)),
+                                                
                                                 ),
                                               ),
                                           errorWidget: (context, url, error) =>
                                               const Icon(Icons.error))
                                               ),
 
-                                  //  ClipRRect(
-                                  //   borderRadius: const BorderRadius.all(
-                                  //       Radius.circular(50)),
-                                  //   child: Image.network(
-                                  //     '${generalObject[index].food!.imageUrl}',
-                                  //     width: 80,
-                                  //     height: 80,
-                                  //     fit: BoxFit.cover,
-                                  //   ),
-                                  // ),
                                 ),
                                 const SizedBox(
                                   width: 10,

@@ -8,47 +8,46 @@ class RandomRecipesWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RandomRecipesBloc, RandomRecipesState>(
-        builder: (context, state) {
-      if (state is RandomRecipesLoading) {
-        return const Center(
-            child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation(Color(0xff5BDDCD))));
-      }
-      if (state is RandomRecipesLoaded) {
-        return const SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: RandomScrollableWidget(),
-        );
-      }
-      if (state is RandomRecipesInitial) {
-        return const Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Text(
-            'Tap on one of the categories to get recipes back',
-            style: TextStyle(
-              color: Colors.grey,
-              fontSize: 20,
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: BlocBuilder<RandomRecipesBloc, RandomRecipesState>(
+          builder: (context, state) {
+        if (state is RandomRecipesLoading) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (state is RandomRecipesLoaded) {
+          return const SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: RandomScrollableWidget(),
+          );
+        }
+        if (state is RandomRecipesInitial) {
+          return const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              'Tap on one of the categories to get recipes back',
+              style: TextStyle(
+                fontSize: 20,
+              ),
             ),
-          ),
-        );
-      }
-      if (state is RandomRecipesError) {
-        return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                const Icon(
-                  Icons.error,
-                  size: 40,
-                  color: Colors.red,
-                ),
-                Text(state.message)
-              ],
-            ));
-      }
+          );
+        }
+        if (state is RandomRecipesError) {
+          return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.error,
+                    size: 40,
+                  ),
+                  Text(state.message)
+                ],
+              ));
+        }
 
-      return const SizedBox.shrink();
-    });
+        return const SizedBox.shrink();
+      }),
+    );
   }
 }

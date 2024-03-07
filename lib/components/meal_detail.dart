@@ -9,7 +9,7 @@ class MealDetails extends StatelessWidget {
     return Text(
       details,
       style: const TextStyle(
-        color: Colors.grey,
+      
         fontSize: 15,
       ),
       maxLines: 2,

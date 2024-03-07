@@ -15,13 +15,20 @@ class RandomRec extends StatefulWidget {
 class _RandomRecState extends State<RandomRec> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: BlocProvider(
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text(
+            'Find Recipes',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
+        body: BlocProvider(
           create: (_) => RandomRecipesBloc(),
           child: const Column(
             children: [
-              SubSection(heading: 'Find Recipes For The Following Categories'),
+              //SubSection(heading: 'Find Recipes For The Following Categories'),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: CategoriesWidget(),

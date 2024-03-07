@@ -13,8 +13,8 @@ class ChatInputBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.all(8),
+    return Padding(
+      padding: const EdgeInsets.only(left: 8, bottom: 8),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
@@ -23,7 +23,6 @@ class ChatInputBox extends StatelessWidget {
               padding: const EdgeInsets.all(4.0),
               child: IconButton(
                   onPressed: onClickCamera,
-                  color: Theme.of(context).colorScheme.onSecondary,
                   icon: const Icon(Icons.file_copy_rounded)),
             ),
           Expanded(
@@ -31,11 +30,14 @@ class ChatInputBox extends StatelessWidget {
             controller: controller,
             minLines: 1,
             maxLines: 6,
-            cursorColor: Theme.of(context).colorScheme.inversePrimary,
             textInputAction: TextInputAction.newline,
             keyboardType: TextInputType.multiline,
-            decoration: const InputDecoration(
-              contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 4),
+            decoration: InputDecoration(
+              enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide.none,
+                  borderRadius: BorderRadius.circular(10)),
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
               hintText: 'Message',
               border: InputBorder.none,
             ),
@@ -43,7 +45,8 @@ class ChatInputBox extends StatelessWidget {
                 FocusManager.instance.primaryFocus?.unfocus(),
           )),
           Padding(
-            padding: const EdgeInsets.all(4),
+            padding:
+                const EdgeInsets.only(left: 4, right: 4, bottom: 4, top: 2),
             child: FloatingActionButton.small(
               onPressed: onSend,
               child: const Icon(Icons.send_rounded),

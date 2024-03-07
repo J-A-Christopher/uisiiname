@@ -12,9 +12,10 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     on<OnSignUp>((event, emit) async {
       try {
         emit(SignUpInitial());
+        emit(SignUpLoading());
         final loginResponse =
             await apiRepository.signUpUser(userSignUpData: event.userData);
-        emit(SignUpLoading());
+
         emit(SignUpLoaded(successUser: loginResponse));
       } catch (err) {
         print('Bloc Error: ${err.toString()}');

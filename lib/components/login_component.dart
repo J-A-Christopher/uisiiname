@@ -68,10 +68,9 @@ class _LoginComponentState extends State<LoginComponent> {
               decoration: InputDecoration(
                   contentPadding: const EdgeInsets.all(5),
                   filled: true,
-                  fillColor: Colors.white,
                   enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(20)),
+                      borderRadius: BorderRadius.circular(10)),
                   hintText: 'Username',
                   hintStyle: Theme.of(context)
                       .textTheme
@@ -95,10 +94,9 @@ class _LoginComponentState extends State<LoginComponent> {
               decoration: InputDecoration(
                   contentPadding: const EdgeInsets.all(5),
                   filled: true,
-                  fillColor: Colors.white,
                   enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(20)),
+                      borderRadius: BorderRadius.circular(10)),
                   hintText: 'Password',
                   hintStyle: Theme.of(context)
                       .textTheme
@@ -112,7 +110,8 @@ class _LoginComponentState extends State<LoginComponent> {
                 onPressed: () {},
                 child: Text('Forgot password?',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        fontSize: 15, color: const Color(0xff23B8A6)))),
+                          fontSize: 15,
+                        ))),
             const SizedBox(
               height: 10,
             ),
@@ -134,9 +133,7 @@ class _LoginComponentState extends State<LoginComponent> {
                         .add(OnLogin(loginResponse: loginDetails));
                   }
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                ),
+                style: ElevatedButton.styleFrom(),
                 child: const Text('LOGIN'),
               ),
             ),
@@ -158,15 +155,13 @@ class _LoginComponentState extends State<LoginComponent> {
                   BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
                 if (state is LoginLoading) {
                   return const Center(
-                    child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation(Color(0xff5BDDCD)),
-                    ),
+                    child: CircularProgressIndicator(),
                   );
                 }
                 if (state is LoginLoaded) {
                   final token = state.loginData.accessToken;
                   final username = state.loginData.username;
-                  
+
                   //final userId = state.loginData.id;
                   StorageUtils().writeUserInfo(key: 'token', userInfo: token);
                   StorageUtils()
@@ -184,12 +179,10 @@ class _LoginComponentState extends State<LoginComponent> {
               alignment: Alignment.center,
               children: [
                 Divider(
-                  color: Colors.black,
                   thickness: 1,
                 ),
                 CircleAvatar(
                   radius: 20,
-                  backgroundColor: Color(0xff8FE1D7),
                   child: Text('OR'),
                 ),
               ],
@@ -211,8 +204,6 @@ class _LoginComponentState extends State<LoginComponent> {
                     ),
                   );
                 },
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xff8FE1D7)),
                 child: const Text(
                   'Sign Up',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),

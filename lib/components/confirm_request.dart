@@ -65,7 +65,7 @@ class ConfirmRequest extends StatelessWidget {
                             height: 150,
                             width: double.infinity,
                             decoration: BoxDecoration(
-                                color: Colors.white,
+                               
                                 borderRadius: BorderRadius.circular(10)),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -115,7 +115,8 @@ class ConfirmRequest extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xff8FE1D7)),
+                       
+                        ),
                     child: const Text('REJECT'),
                   ),
                 ),
@@ -124,7 +125,8 @@ class ConfirmRequest extends StatelessWidget {
                   child: ElevatedButton(
                       onPressed: () {},
                       style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xff8FE1D7)),
+                          
+                          ),
                       child: const Text('CONFIRM')),
                 )
               ],

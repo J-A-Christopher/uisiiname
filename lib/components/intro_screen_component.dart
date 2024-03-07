@@ -16,6 +16,10 @@ class OnBoardingScreen extends StatelessWidget {
         child: Padding(
       padding: const EdgeInsets.only(top: 10),
       child: IntroductionScreen(
+        dotsDecorator: DotsDecorator(
+          activeColor: Theme.of(context).primaryColor,
+          color: Theme.of(context).primaryColor.withOpacity(0.5),
+        ),
         pages: [
           PageViewModel(
               title: '',
@@ -82,17 +86,17 @@ class OnBoardingScreen extends StatelessWidget {
         },
         done: const Text(
           'Login',
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
         ),
         showSkipButton: true,
         showNextButton: true,
         skip: const Text(
           "Skip",
-          style: TextStyle(color: Colors.black),
         ),
         next: const Icon(
           Icons.arrow_forward,
-          color: Colors.black,
         ),
       ),
     ));

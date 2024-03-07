@@ -29,7 +29,7 @@ class _BottomNavgBarState extends State<BottomNavgBar> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
-          selectedItemColor: const Color(0xff5BDDCD),
+         
           currentIndex: _selectedIndex,
           onTap: _onItemTapped,
           items: const [

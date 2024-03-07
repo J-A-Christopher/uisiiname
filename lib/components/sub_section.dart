@@ -9,7 +9,7 @@ class SubSection extends StatelessWidget {
     return Text(
       heading,
       style: const TextStyle(
-          fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+          fontSize: 20, fontWeight: FontWeight.bold, ),
     );
   }
 }

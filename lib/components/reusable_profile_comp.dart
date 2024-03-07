@@ -18,21 +18,18 @@ class ReusableContainer extends StatelessWidget {
         Container(
           height: 55,
           width: 55,
-          decoration: BoxDecoration(
-              color: const Color(0xffE7FFF9),
-              borderRadius: BorderRadius.circular(8)),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
           child: Icon(
             iconToBeUsed.icon,
             size: 35,
-            color: const Color(0xff8FE1D7),
+            color: Theme.of(context).primaryColor,
           ),
         ),
         Text(
           text,
-          style: Theme.of(context)
-              .textTheme
-              .bodySmall
-              ?.copyWith(fontSize: 18, color: const Color(0xffA1A1A1)),
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                fontSize: 18,
+              ),
         ),
         IconButton(
             onPressed: () {

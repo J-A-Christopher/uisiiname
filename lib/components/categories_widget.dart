@@ -41,8 +41,7 @@ class CategoriesWidget extends StatelessWidget {
             child: Container(
               height: 80,
               width: 90,
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
+              decoration: const BoxDecoration(),
               child: Column(
                 children: [
                   Padding(

@@ -13,9 +13,10 @@ class FoodCreationBloc extends Bloc<FoodCreationEvent, FoodCreationState> {
     on<OnFoodCreation>((event, emit) async {
       try {
         emit(FoodCreationInitial());
+        emit(FoodCreationLoading());
         final loadedResponse =
             await apiRepository.createFood(event.foodFormationData);
-        emit(FoodCreationLoading());
+
         emit(FoodCreationLoaded(foodData: loadedResponse));
       } catch (error) {
         emit(FoodCreationError(message: error.toString()));

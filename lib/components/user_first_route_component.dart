@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:usiiname/components/donation_component.dart';
 import 'package:usiiname/components/donation_request.dart';
+import 'package:usiiname/components/onboarding_cubit.dart';
 import 'package:usiiname/components/profile_component.dart';
-import 'package:usiiname/components/your_donation_component.dart';
 import 'package:usiiname/features/createfood/presentation/bloc/food_creation_bloc.dart';
 import 'package:usiiname/features/loginfeature/presentation/bloc/login_bloc.dart';
 import 'package:usiiname/features/profilefetch/presentation/bloc/profile_fetch_bloc.dart';
@@ -42,36 +42,49 @@ class _UserFirstRouteState extends State<UserFirstRoute> {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context).size;
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10))),
-        backgroundColor: const Color(0xffD6E2DF),
-        onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => BlocProvider(
-                    create: (_) => ProfileFetchBloc(),
-                    child: const ProfileComponent(),
-                  )));
-        },
-        child: const Icon(
-          Icons.person,
-          size: 35,
-          color: Color(0xff5BDDCD),
-        ),
-      ),
       body: BlocProvider.value(
         value: LoginBloc(),
         child: Padding(
           padding: const EdgeInsets.only(top: 50.0, left: 15, right: 15),
           child: ListView(
             children: [
-              Center(
-                child: Text(
-                  username == null ? 'Hi there' : 'Welcome Back \n$username !',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall
-                      ?.copyWith(fontSize: 25, fontWeight: FontWeight.bold),
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Row(
+                  children: [
+                    Text(
+                      username == null
+                          ? 'Hi there'
+                          : 'Welcome Back $username !',
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge
+                          ?.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    const Spacer(),
+                    Expanded(
+                      child: IconButton(
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => MultiBlocProvider(
+                                      providers: [
+                                        BlocProvider(
+                                          create: (_) => ProfileFetchBloc(),
+                                        ),
+                                        BlocProvider(
+                                          create: (_) => OnboardingCubit(),
+                                        ),
+                                      ],
+                                      child: const ProfileComponent(),
+                                    )));
+                          },
+                          icon: Icon(
+                            Icons.settings,
+                            size: 30,
+                            color: Theme.of(context).primaryColor,
+                          )),
+                    )
+                  ],
                 ),
               ),
               SizedBox(
@@ -80,14 +93,16 @@ class _UserFirstRouteState extends State<UserFirstRoute> {
                     ? Image.asset('assets/placeholder1.jpg')
                     : Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: CachedNetworkImage(
-                          imageUrl: imageUrl!,
-                          placeholder: (context, url) {
-                            return const Center(
-                                child: CircularProgressIndicator(
-                              color: Color(0xff8FE1D7),
-                            ));
-                          },
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(50),
+                          child: CachedNetworkImage(
+                            imageUrl: imageUrl!,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) {
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            },
+                          ),
                         ),
                       ),
               ),
@@ -102,9 +117,8 @@ class _UserFirstRouteState extends State<UserFirstRoute> {
                             )));
                   },
                   style: ElevatedButton.styleFrom(
-                      elevation: 5,
-                      backgroundColor: Colors.white,
-                      side: const BorderSide(color: Colors.black)),
+                    elevation: 5,
+                  ),
                   child: Text(
                     'Make a Donation',
                     style: Theme.of(context)
@@ -127,11 +141,10 @@ class _UserFirstRouteState extends State<UserFirstRoute> {
                         ));
                   },
                   style: ElevatedButton.styleFrom(
-                      elevation: 5,
-                      backgroundColor: Colors.white,
-                      side: const BorderSide(color: Colors.black)),
+                    elevation: 5,
+                  ),
                   child: Text(
-                    'Donations',
+                    'Donations & Features',
                     style: Theme.of(context)
                         .textTheme
                         .bodySmall
@@ -149,9 +162,8 @@ class _UserFirstRouteState extends State<UserFirstRoute> {
                         builder: (context) => const DonationRequests()));
                   },
                   style: ElevatedButton.styleFrom(
-                      elevation: 5,
-                      backgroundColor: Colors.white,
-                      side: const BorderSide(color: Colors.black)),
+                    elevation: 5,
+                  ),
                   child: Text(
                     'Donation Requests',
                     style: Theme.of(context)

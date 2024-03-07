@@ -95,7 +95,7 @@ class _DonationRequestsState extends State<DonationRequests> {
                         if (state is OrderStatusLoading) {
                           return const Center(
                             child: CircularProgressIndicator(
-                              color: Color(0xff8FE1D7),
+                           
                             ),
                           );
                         }

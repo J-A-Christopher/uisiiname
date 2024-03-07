@@ -52,8 +52,7 @@ class FoodDetailComponent extends StatelessWidget {
                           fit: BoxFit.cover,
                           placeholder: (context, url) => const Center(
                                 child: CircularProgressIndicator(
-                                  valueColor:
-                                      AlwaysStoppedAnimation(Color(0xff5BDDCD)),
+                                
                                 ),
                               ),
                           errorWidget: (context, url, error) =>
@@ -123,7 +122,7 @@ class FoodDetailComponent extends StatelessWidget {
                     if (state is FirstOrderReservationLoading) {
                       return const Center(
                         child:
-                            CircularProgressIndicator(color: Color(0xff5BDDCD)),
+                            CircularProgressIndicator(),
                       );
                     }
                     return const SizedBox();

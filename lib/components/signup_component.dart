@@ -70,10 +70,19 @@ class _SignUpComponentState extends State<SignUpComponent> {
               username: userName,
               profilePicture: pickedImage)
           .toJson();
+
       if (context.mounted) {
         context.read<SignUpBloc>().add(OnSignUp(userData: signUpData));
         passwordController.clear();
         formKey.currentState!.reset();
+      }
+    }
+    if (pickedImage == null) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('Please take an image before proceeding..')));
+        print(pickedImage);
+        return;
       }
     }
   }
@@ -101,7 +110,6 @@ class _SignUpComponentState extends State<SignUpComponent> {
               Center(
                 child: CircleAvatar(
                   radius: 40,
-                  backgroundColor: const Color(0xff5BDDCD),
                   child: isLoading
                       ? const CircularProgressIndicator()
                       : pickedImage == null
@@ -141,10 +149,9 @@ class _SignUpComponentState extends State<SignUpComponent> {
                 decoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(5),
                     filled: true,
-                    fillColor: Colors.white,
                     enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(20)),
+                        borderRadius: BorderRadius.circular(10)),
                     hintText: 'First Name',
                     hintStyle: Theme.of(context)
                         .textTheme
@@ -167,10 +174,9 @@ class _SignUpComponentState extends State<SignUpComponent> {
                 decoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(5),
                     filled: true,
-                    fillColor: Colors.white,
                     enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(20)),
+                        borderRadius: BorderRadius.circular(10)),
                     hintText: 'Last Name',
                     hintStyle: Theme.of(context)
                         .textTheme
@@ -193,10 +199,9 @@ class _SignUpComponentState extends State<SignUpComponent> {
                 decoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(5),
                     filled: true,
-                    fillColor: Colors.white,
                     enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(20)),
+                        borderRadius: BorderRadius.circular(10)),
                     hintText: 'Username',
                     hintStyle: Theme.of(context)
                         .textTheme
@@ -222,10 +227,9 @@ class _SignUpComponentState extends State<SignUpComponent> {
                 decoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(5),
                     filled: true,
-                    fillColor: Colors.white,
                     enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(20)),
+                        borderRadius: BorderRadius.circular(10)),
                     hintText: 'Phone Number',
                     hintStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
                           fontSize: 15,
@@ -293,10 +297,9 @@ class _SignUpComponentState extends State<SignUpComponent> {
                 decoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(5),
                     filled: true,
-                    fillColor: Colors.white,
                     enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(20)),
+                        borderRadius: BorderRadius.circular(10)),
                     hintText: 'Email',
                     hintStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
                           fontSize: 15,
@@ -320,10 +323,9 @@ class _SignUpComponentState extends State<SignUpComponent> {
                 decoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(5),
                     filled: true,
-                    fillColor: Colors.white,
                     enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(20)),
+                        borderRadius: BorderRadius.circular(10)),
                     hintText: 'Password',
                     hintStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
                           fontSize: 15,
@@ -343,10 +345,9 @@ class _SignUpComponentState extends State<SignUpComponent> {
                 decoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(5),
                     filled: true,
-                    fillColor: Colors.white,
                     enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(20)),
+                        borderRadius: BorderRadius.circular(10)),
                     hintText: 'Confirm Password',
                     hintStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
                           fontSize: 15,
@@ -362,8 +363,6 @@ class _SignUpComponentState extends State<SignUpComponent> {
                   onPressed: () {
                     submitSignUpForm();
                   },
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xff8FE1D7)),
                   child: const Text(
                     'Submit',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
@@ -391,7 +390,7 @@ class _SignUpComponentState extends State<SignUpComponent> {
                   if (state is SignUpLoading) {
                     return const Center(
                         child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation(Color(0xff5BDDCD)),
+                      color: Colors.red,
                     ));
                   }
                   return const SizedBox();
@@ -412,7 +411,8 @@ class _SignUpComponentState extends State<SignUpComponent> {
                       child: Text(
                         'Sign in instead',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            fontSize: 15, color: const Color(0xff0085FF)),
+                              fontSize: 15,
+                            ),
                       )),
                 ],
               )

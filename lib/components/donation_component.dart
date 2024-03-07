@@ -85,7 +85,7 @@ class _DonationComponentState extends State<DonationComponent> {
   }
 
   void submitForm() {
-    if (foodDetailsForm.currentState!.validate() && pickedImage != null) {
+    if (foodDetailsForm.currentState!.validate()) {
       foodDetailsForm.currentState!.save();
       final foodData = FoodResponse(
               address: address,
@@ -105,6 +105,12 @@ class _DonationComponentState extends State<DonationComponent> {
       prepDateController.clear();
       prepDateController.clear();
       foodDetailsForm.currentState!.reset();
+    }
+    if (pickedImage == null) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Please take an image of your food')));
+      }
     }
   }
 
@@ -142,9 +148,7 @@ class _DonationComponentState extends State<DonationComponent> {
                 ),
                 child: Center(
                   child: isLoading
-                      ? const CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation(Color(0xff5BDDCD)),
-                        )
+                      ? const CircularProgressIndicator()
                       : Text(
                           'Take a picture of your food.',
                           style: Theme.of(context)
@@ -160,16 +164,15 @@ class _DonationComponentState extends State<DonationComponent> {
                       : () async {
                           await getImage();
                         },
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.camera_alt,
-                    color: Colors.black,
+                    color: Theme.of(context).primaryColor,
                   ),
                   label: Text(
                     'Take  picture',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall
-                        ?.copyWith(fontSize: 15, color: Colors.black),
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          fontSize: 15,
+                        ),
                   )),
               const SizedBox(
                 height: 10,
@@ -187,10 +190,9 @@ class _DonationComponentState extends State<DonationComponent> {
                 decoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(5),
                     filled: true,
-                    fillColor: Colors.white,
                     enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(20)),
+                        borderRadius: BorderRadius.circular(10)),
                     hintText: 'Food Name',
                     hintStyle: Theme.of(context)
                         .textTheme
@@ -205,8 +207,9 @@ class _DonationComponentState extends State<DonationComponent> {
                 onTap: () async {
                   DateTime? pickedDate = await showDatePicker(
                       context: context,
-                      firstDate: DateTime.now(),
-                      lastDate: DateTime(2025));
+                      firstDate:
+                          DateTime.now().subtract(const Duration(days: 1)),
+                      lastDate: DateTime.now());
                   if (pickedDate != null) {
                     String formattedDate =
                         DateFormat('yyyy-MM-dd').format(pickedDate);
@@ -228,10 +231,9 @@ class _DonationComponentState extends State<DonationComponent> {
                 decoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(5),
                     filled: true,
-                    fillColor: Colors.white,
                     enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(20)),
+                        borderRadius: BorderRadius.circular(10)),
                     hintText: 'Date of Preparation',
                     hintStyle: Theme.of(context)
                         .textTheme
@@ -259,10 +261,9 @@ class _DonationComponentState extends State<DonationComponent> {
                 decoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(5),
                     filled: true,
-                    fillColor: Colors.white,
                     enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(20)),
+                        borderRadius: BorderRadius.circular(10)),
                     hintText: 'Time of Preparation',
                     hintStyle: Theme.of(context)
                         .textTheme
@@ -287,10 +288,9 @@ class _DonationComponentState extends State<DonationComponent> {
                 decoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(5),
                     filled: true,
-                    fillColor: Colors.white,
                     enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(20)),
+                        borderRadius: BorderRadius.circular(10)),
                     hintText: 'Time required for Delivery',
                     hintStyle: Theme.of(context)
                         .textTheme
@@ -313,10 +313,9 @@ class _DonationComponentState extends State<DonationComponent> {
                 decoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(5),
                     filled: true,
-                    fillColor: Colors.white,
                     enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(20)),
+                        borderRadius: BorderRadius.circular(10)),
                     hintText: 'Quantity',
                     hintStyle: Theme.of(context)
                         .textTheme
@@ -336,10 +335,9 @@ class _DonationComponentState extends State<DonationComponent> {
                 decoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(5),
                     filled: true,
-                    fillColor: Colors.white,
                     enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(20)),
+                        borderRadius: BorderRadius.circular(10)),
                     hintText: 'Address',
                     hintStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
                           fontSize: 15,
@@ -397,8 +395,6 @@ class _DonationComponentState extends State<DonationComponent> {
                 onPressed: () {
                   submitForm();
                 },
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xff8FE1D7)),
                 child: const Text(
                   'Submit',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
@@ -421,9 +417,7 @@ class _DonationComponentState extends State<DonationComponent> {
                     builder: (context, state) {
                   if (state is FoodCreationLoading) {
                     return const Center(
-                      child: CircularProgressIndicator(
-                        color: Color(0xff8FE1D7),
-                      ),
+                      child: CircularProgressIndicator(),
                     );
                   }
                   return const SizedBox();

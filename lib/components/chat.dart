@@ -35,7 +35,6 @@ class _ChartComponentState extends State<ChartComponent> {
           children: [
             if (searchedText != null)
               MaterialButton(
-                  color: const Color(0xff5BDDCD),
                   onPressed: () {
                     setState(() {
                       searchedText = null;

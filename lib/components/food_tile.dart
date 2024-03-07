@@ -9,7 +9,7 @@ class FoodTitle extends StatelessWidget {
     return Text(
       foodTitle,
       style: const TextStyle(
-          fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black),
+          fontSize: 15, fontWeight: FontWeight.bold,),
       maxLines: 2,
     );
   }
